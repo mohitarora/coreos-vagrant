@@ -1,8 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-require 'fileutils'
-
 CLOUD_CONFIG_PATH = "./user-data"
 
 # Defaults for config options defined in CONFIG
