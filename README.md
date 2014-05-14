@@ -22,7 +22,6 @@ Generate a new token for your cluster from https://discovery.etcd.io/new and rep
 
 ```
 vagrant up
-vagrant ssh
 ```
 
 ``vagrant up`` triggers vagrant to download the CoreOS image (if necessary) and (re)launch the instance
