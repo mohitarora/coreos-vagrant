@@ -4,7 +4,7 @@
 CLOUD_CONFIG_PATH = "./user-data"
 
 # Defaults for config options defined in CONFIG
-$num_instances = 1
+$num_instances = 3
 $vb_gui = false
 $vb_memory = 1024
 $vb_cpus = 1
