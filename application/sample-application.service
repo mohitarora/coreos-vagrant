@@ -8,6 +8,7 @@ ExecStart=/usr/bin/docker run --name sample-application-%i --rm --expose 8080 -p
 ExecStartPost=/usr/bin/etcdctl set /application/server/sample-application-%i ${COREOS_PUBLIC_IPV4}:%i
 ExecStop=/usr/bin/docker kill sample-application-%i
 ExecStopPost=/usr/bin/etcdctl rm /application/server/sample-application-%i
+TimeoutSec=120min
 
 [X-Fleet]
 X-Conflicts=sample-application-@%i.service
