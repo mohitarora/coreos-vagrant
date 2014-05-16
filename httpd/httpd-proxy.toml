@@ -1,0 +1,8 @@
+[template]
+src         = "httpd-proxy.conf.tmpl"
+dest        = "/etc/httpd/conf.d/httpd-proxy.conf"
+owner       = "root"
+group 		= "root"
+mode        = "0644"
+keys        = [ "/applications/sample-application" ]
+reload_cmd  = "/usr/sbin/apachectl restart"

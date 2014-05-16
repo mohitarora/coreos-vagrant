@@ -1,0 +1,14 @@
+[Unit]
+Description=web-server
+
+[Service]
+EnvironmentFile=/etc/environment
+ExecStartPre=/usr/bin/docker pull mohitarora/dropwizard_app_v1.0
+ExecStart=/usr/bin/docker run --name %p --rm --expose 8080 -p %i:8080 mohitarora/dropwizard_app_v1.0 /usr/bin/java -jar /app/dropwizard-sample-1.0-SNAPSHOT.jar server /app/sample.yml
+ExecStartPost=/usr/bin/etcdctl set /applications/sample-application/%p ${COREOS_PUBLIC_IPV4}:%i
+ExecStop=/usr/bin/docker stop %p
+ExecStopPost=/usr/bin/etcdctl rm /applications/sample-application/%p
+TimeoutSec=120min
+
+[X-Fleet]
+X-Conflicts=sample-application-*@%i.service
