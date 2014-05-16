@@ -7,9 +7,11 @@ RUN mkdir -p /var/log/supervisor
 RUN yum -y install which
 RUN yum -y install git
 RUN yum -y install httpd
+RUN yum -y install wget
 
 # Download confd
-RUN curl -L https://github.com/kelseyhightower/confd/releases/download/v0.3.0/confd_0.3.0_linux_amd64.tar.gz | /bin/tar xz
+RUN wget https://github.com/kelseyhightower/confd/releases/download/v0.3.0/confd_0.3.0_linux_amd64.tar.gz
+RUN tar -xvf confd_0.3.0_linux_amd64.tar.gz
 RUN mv confd /usr/local/bin/confd
 
 # Create directories
