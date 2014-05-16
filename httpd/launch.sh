@@ -17,6 +17,6 @@ done
 confd -interval 10 -node $ETCD -config-file /etc/confd/conf.d/httpd-proxy.toml &
 echo "[httpd] confd is listening for changes on etcd..."
 
-# Start nginx
-echo "[httpd] starting nginx service..."
+# Start apche
+echo "[httpd] starting apche service..."
 apachectl start
