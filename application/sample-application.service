@@ -6,7 +6,7 @@ EnvironmentFile=/etc/environment
 ExecStartPre=/usr/bin/docker pull mohitarora/dropwizard_app_v1.0
 ExecStart=/usr/bin/docker run --name sample-application-%i --rm --expose 8080 -p %i:8080 mohitarora/dropwizard_app_v1.0 /usr/bin/java -jar /app/dropwizard-sample-1.0-SNAPSHOT.jar server /app/sample.yml
 ExecStartPost=/usr/bin/etcdctl set /application/server/sample-application-%i ${COREOS_PUBLIC_IPV4}:%i
-ExecStop=/usr/bin/docker kill sample-application-%i
+ExecStop=/usr/bin/docker stop sample-application-%i
 ExecStopPost=/usr/bin/etcdctl rm /application/server/sample-application-%i
 TimeoutSec=120min
 
