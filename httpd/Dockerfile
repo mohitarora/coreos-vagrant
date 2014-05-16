@@ -12,6 +12,7 @@ RUN yum -y install httpd
 RUN mkdir -p /etc/confd/conf.d
 RUN mkdir -p /etc/confd/templates
 
+EXPOSE 22 80  
 
 # Add source teamplate
 ADD ./httpd-proxy.conf.tmpl /etc/confd/templates/httpd-proxy.conf.tmpl
@@ -19,8 +20,9 @@ ADD ./httpd-proxy.conf.tmpl /etc/confd/templates/httpd-proxy.conf.tmpl
 # Add template resource config
 ADD ./httpd-proxy.toml /etc/confd/conf.d/httpd-proxy.toml
 
-ADD supervisord.conf /etc/supervisord.conf
+ADD ./launch.sh /opt/launch.sh
 
-EXPOSE 22 80 
+RUN chmod +x /opt/launch.sh
 
-CMD ["/usr/bin/supervisord"]
+# Run the launch script
+CMD /opt/launch.sh
