@@ -2,7 +2,7 @@
 
 coreos:
   etcd:
-      discovery: https://discovery.etcd.io/90ddb6d74fb328e72dbe4ba4c7d272d3
+      discovery: https://discovery.etcd.io/838ffe0a9a166d1014269d83ab2ddccc
       addr: $public_ipv4:4001
       peer-addr: $public_ipv4:7001
   units:
