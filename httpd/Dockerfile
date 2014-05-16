@@ -14,10 +14,10 @@ RUN mkdir -p /etc/confd/templates
 
 
 # Add source teamplate
-ADD ./httpd-vhost.conf.tmpl /etc/confd/templates/httpd-vhost.conf.tmpl
+ADD ./httpd-proxy.conf.tmpl /etc/confd/templates/httpd-proxy.conf.tmpl
 
 # Add template resource config
-ADD ./httpd-vhost.toml /etc/confd/conf.d/httpd-vhost.toml
+ADD ./httpd-proxy.toml /etc/confd/conf.d/httpd-proxy.toml
 
 ADD supervisord.conf /etc/supervisord.conf
 
