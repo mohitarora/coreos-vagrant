@@ -9,7 +9,9 @@ RUN yum -y install git
 RUN yum -y install httpd
 
 # Create directories
-RUN mkdir -p /etc/confd/{conf.d,templates}
+RUN mkdir -p /etc/confd/conf.d
+RUN mkdir -p /etc/confd/templates
+
 
 # Add source teamplate
 ADD ./httpd-vhost.conf.tmpl /etc/confd/templates/httpd-vhost.conf.tmpl
