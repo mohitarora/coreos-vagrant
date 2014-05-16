@@ -9,7 +9,7 @@ RUN yum -y install git
 RUN yum -y install httpd
 
 # Download confd
-RUN curl -L https://github.com/kelseyhightower/confd/releases/download/v0.3.0/confd_0.3.0_linux_amd64.tar.gz | tar xz
+RUN curl -L https://github.com/kelseyhightower/confd/releases/download/v0.3.0/confd_0.3.0_linux_amd64.tar.gz | /bin/tar xz
 RUN mv confd /usr/local/bin/confd
 
 # Create directories
