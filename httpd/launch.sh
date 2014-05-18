@@ -12,6 +12,6 @@ until confd -onetime -node $ETCD -config-file /etc/confd/conf.d/httpd-proxy.toml
   sleep 5
 done
 
-# Start apche
-echo "[httpd] starting apache service..."
-apachectl start
+# Run confd in the background to watch the upstream servers
+nohup confd -interval 120 -node $ETCD -config-file /etc/confd/conf.d/httpd-proxy.toml &
+echo "[httpd] confd is listening for changes on etcd..."
