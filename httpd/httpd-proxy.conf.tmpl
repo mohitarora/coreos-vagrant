@@ -3,5 +3,5 @@
       BalancerMember http://{{$server.Value}}
     {{end}}
 </Proxy>
-ProxyPass /sample balancer://mycluster
-ProxyPassReverse /sample balancer://mycluster
+ProxyPass /sample balancer://mycluster/sample
+ProxyPassReverse /sample balancer://mycluster/sample
