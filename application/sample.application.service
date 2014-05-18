@@ -11,4 +11,4 @@ ExecStopPost=/usr/bin/etcdctl rm /applications/sample/%p
 TimeoutSec=120min
 
 [X-Fleet]
-X-Conflicts=sample-application-*@%i.service
+X-Conflicts=sample.application.*@%i.service
