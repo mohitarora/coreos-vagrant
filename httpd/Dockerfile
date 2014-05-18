@@ -1,11 +1,5 @@
 FROM mohitarora/base_v1.0
 
-RUN yum -y update
-RUN yum -y install python-setuptools
-RUN easy_install supervisor
-RUN mkdir -p /var/log/supervisor
-RUN yum -y install which
-RUN yum -y install git
 RUN yum -y install httpd
 
 # Create directories

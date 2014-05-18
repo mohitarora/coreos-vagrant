@@ -1,5 +1,5 @@
 <Proxy balancer://mycluster>
-    {{range $server := .applications_sample-application}}
+    {{range $server := .applications_sample}}
       BalancerMember http://{{$server.Value}}
     {{end}}
 </Proxy>
