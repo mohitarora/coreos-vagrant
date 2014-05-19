@@ -13,3 +13,8 @@ RUN wget -O confd_0.3.0_linux_amd64.tar.gz https://github.com/kelseyhightower/co
 RUN tar -zxvf confd_0.3.0_linux_amd64.tar.gz
 
 RUN mv confd /usr/local/bin/confd
+
+# Create directories
+RUN mkdir -p /etc/confd/conf.d
+
+RUN mkdir -p /etc/confd/templates

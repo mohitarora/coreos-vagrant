@@ -2,10 +2,6 @@ FROM mohitarora/base_v1.0
 
 RUN yum -y install httpd
 
-# Create directories
-RUN mkdir -p /etc/confd/conf.d
-RUN mkdir -p /etc/confd/templates
-
 EXPOSE 22 80  
 
 # Add source teamplate
