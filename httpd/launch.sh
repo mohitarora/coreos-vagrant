@@ -13,5 +13,4 @@ until confd -onetime -node $ETCD -config-file /etc/confd/conf.d/httpd-proxy.toml
 done
 
 # Run confd in the background to watch the upstream servers
-nohup confd -interval 120 -quiet -node $ETCD -config-file /etc/confd/conf.d/httpd-proxy.toml > /var/log/confd.log 2>&1 &
-echo "[httpd] confd is listening for changes on etcd..."
+confd -interval 120 -quiet -node $ETCD -config-file /etc/confd/conf.d/httpd-proxy.toml > /var/log/confd.log 2>&1
