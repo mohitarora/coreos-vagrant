@@ -1,0 +1,25 @@
+template: Hello, %s!
+defaultName: Stranger
+logging:
+  level: INFO
+  loggers:
+    com.sample: INFO
+  appenders:
+    - type: file
+      currentLogFilename: /tmp/example.log
+      threshold: ALL
+      archivedLogFilenamePattern: /tmp/example-%d.log.gz
+      archivedFileCount: 5
+      timeZone: UTC
+    - type: console
+      threshold: OFF
+      timeZone: UTC
+      target: stdout
+server:
+  requestLog:
+    timeZone: UTC
+    appenders:
+      - type: console
+        threshold: OFF
+        timeZone: UTC
+        target: stdout
