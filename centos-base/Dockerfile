@@ -11,6 +11,10 @@ RUN yum -y install git
 
 RUN yum -y install wget
 
+RUN yum -y install tar
+
+RUN yum -y install vi
+
 # Download confd
 RUN wget -O confd_0.3.0_linux_amd64.tar.gz https://github.com/kelseyhightower/confd/releases/download/v0.3.0/confd_0.3.0_linux_amd64.tar.gz
 
