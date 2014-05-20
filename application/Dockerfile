@@ -1,5 +1,5 @@
 # Use java base image
-FROM mohitarora/jdk7-base
+FROM mohitarora/jdk7-base:v1.0
 
 # Create an application directory
 RUN mkdir -p /app
