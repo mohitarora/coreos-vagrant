@@ -1,4 +1,4 @@
-FROM mohitarora/centos-base
+FROM mohitarora/centos-base:v1.0
 
 RUN yum -y install httpd
 
