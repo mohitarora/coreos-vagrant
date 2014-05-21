@@ -3,11 +3,11 @@ Description=sample-application
 
 [Service]
 EnvironmentFile=/etc/environment
-ExecStartPre=/usr/bin/docker pull mohitarora/sample-app:%p
-ExecStart=/usr/bin/docker run --name sample-app-%p:%i --expose 8080 -p %i:8080 mohitarora/sample-app:%p /opt/launch.sh
-ExecStartPost=/usr/bin/etcdctl set /applications/sample/${COREOS_PUBLIC_IPV4}:%p:%i ${COREOS_PUBLIC_IPV4}:%i
-ExecStop=/usr/bin/docker stop sample-app-%p:%i
-ExecStopPost=/usr/bin/etcdctl rm /applications/sample/${COREOS_PUBLIC_IPV4}:%p:%i
+ExecStartPre=/usr/bin/docker pull mohitarora/sample-app:v1.0.1
+ExecStart=/usr/bin/docker run --name %p --expose 8080 -p %i:8080 mohitarora/sample-app:v1.0.1 /opt/launch.sh
+ExecStartPost=/usr/bin/etcdctl set /applications/sample/%p ${COREOS_PUBLIC_IPV4}:%i
+ExecStop=/usr/bin/docker stop %p
+ExecStopPost=/usr/bin/etcdctl rm /applications/sample/%p
 TimeoutSec=120min
 
 [X-Fleet]
