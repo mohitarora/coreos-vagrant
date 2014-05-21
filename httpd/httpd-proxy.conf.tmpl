@@ -1,7 +1,0 @@
-<Proxy balancer://mycluster>
-    {{range $server := .applications_sample}}
-      BalancerMember http://{{$server.Value}}
-    {{end}}
-</Proxy>
-ProxyPass /sample balancer://mycluster/sample
-ProxyPassReverse /sample balancer://mycluster/sample
