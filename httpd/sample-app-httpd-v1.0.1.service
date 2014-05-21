@@ -1,0 +1,12 @@
+[Unit]
+Description=web-server
+
+[Service]
+EnvironmentFile=/etc/environment
+ExecStartPre=/usr/bin/docker pull mohitarora/sample-app-httpd:v1.0.1
+ExecStart=/usr/bin/docker run --name %p --expose 80 -p %i:80 -e HOST_IP=${COREOS_PUBLIC_IPV4} mohitarora/sample-app-httpd:v1.0.1 /opt/launch.sh
+ExecStop=/usr/bin/docker stop %p
+TimeoutSec=120min
+
+[X-Fleet]
+X-Conflicts=*@%i.service
