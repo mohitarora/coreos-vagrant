@@ -9,4 +9,4 @@ ExecStop=/usr/bin/docker stop httpd-%p:%i
 TimeoutSec=120min
 
 [X-Fleet]
-X-Conflicts=v*@%i.service
+X-Conflicts=*@%i.service

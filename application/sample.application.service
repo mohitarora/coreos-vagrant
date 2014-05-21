@@ -11,4 +11,4 @@ ExecStopPost=/usr/bin/etcdctl rm /applications/sample/${COREOS_PUBLIC_IPV4}:%p:%
 TimeoutSec=120min
 
 [X-Fleet]
-X-Conflicts=v*@%i.service
+X-Conflicts=*@%i.service
