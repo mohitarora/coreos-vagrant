@@ -3,10 +3,10 @@ Description=web-server
 
 [Service]
 EnvironmentFile=/etc/environment
-ExecStartPre=/usr/bin/docker pull mohitarora/sample_app_httpd
-ExecStart=/usr/bin/docker run --name %p -p 80:80 -e HOST_IP=${COREOS_PUBLIC_IPV4} mohitarora/sample_app_httpd
-ExecStop=/usr/bin/docker stop %p
+ExecStartPre=/usr/bin/docker pull mohitarora/sample-app-httpd:%p
+ExecStart=/usr/bin/docker run --name httpd-%p:%i --expose 80 -p %i:80 -e HOST_IP=${COREOS_PUBLIC_IPV4} mohitarora/sample-app-httpd:%p /opt/launch.sh
+ExecStop=/usr/bin/docker stop httpd-%p:%i
 TimeoutSec=120min
 
 [X-Fleet]
-X-Conflicts=httpd.service
+X-Conflicts=v*@%i.service
