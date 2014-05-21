@@ -3,10 +3,10 @@ Description=sample-application
 
 [Service]
 EnvironmentFile=/etc/environment
-ExecStartPre=/usr/bin/docker pull mohitarora/sample_app
-ExecStart=/usr/bin/docker run --name %p --expose 8080 -p %i:8080 mohitarora/sample_app /usr/bin/java -jar /app/dropwizard-sample-1.0-SNAPSHOT.jar server /app/sample.yml
+ExecStartPre=/usr/bin/docker pull mohitarora/sample-app:%p
+ExecStart=/usr/bin/docker run --name sample-app:%p:%i --expose 8080 -p %i:8080 mohitarora/sample-app:%p /opt/launch.sh
 ExecStartPost=/usr/bin/etcdctl set /applications/sample/%p ${COREOS_PUBLIC_IPV4}:%i
-ExecStop=/usr/bin/docker stop %p
+ExecStop=/usr/bin/docker stop sample-app:%p:%i
 ExecStopPost=/usr/bin/etcdctl rm /applications/sample/%p
 TimeoutSec=120min
 
