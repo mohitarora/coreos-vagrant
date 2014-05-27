@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cruise xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="cruise-config.xsd" schemaVersion="72">
+  <server artifactsdir="artifacts" commandRepositoryLocation="default" serverId="f92de171-d220-41fc-977d-99ad997ed813" />
+  <pipelines group="docker">
+    <pipeline name="centos-base" labeltemplate="v1.0.${COUNT}" isLocked="true" template="docker-images">
+      <params>
+        <param name="PACKER_BUILD_COMMAND_PARAMETER">-var version=$GO_PIPELINE_LABEL centos-base.json</param>
+        <param name="DOCKER_PUSH_COMMAND_PARAMETER">mohitarora/centos-base:$GO_PIPELINE_LABEL</param>
+      </params>
+      <materials>
+        <git url="https://github.com/mohitarora/docker-centos-base.git" />
+      </materials>
+    </pipeline>
+    <pipeline name="jdk7-base" labeltemplate="v1.0.${COUNT}" isLocked="true" template="docker-images">
+      <params>
+        <param name="PACKER_BUILD_COMMAND_PARAMETER">-var version=$GO_PIPELINE_LABEL -var base-image-version=$GO_DEPENDENCY_LABEL_CENTOS_BASE_IMAGE jdk7-base.json</param>
+        <param name="DOCKER_PUSH_COMMAND_PARAMETER">mohitarora/jdk7-base:$GO_PIPELINE_LABEL</param>
+      </params>
+      <materials>
+        <git url="https://github.com/mohitarora/docker-jdk7-base.git" />
+        <pipeline pipelineName="centos-base" stageName="build_docker_image" materialName="centos_base_image" />
+      </materials>
+    </pipeline>
+    <pipeline name="httpd-base" labeltemplate="v1.0.${COUNT}" isLocked="true" template="docker-images">
+      <params>
+        <param name="PACKER_BUILD_COMMAND_PARAMETER">-var version=$GO_PIPELINE_LABEL -var base-image-version=$GO_DEPENDENCY_LABEL_CENTOS_BASE_IMAGE httpd-base.json</param>
+        <param name="DOCKER_PUSH_COMMAND_PARAMETER">mohitarora/httpd-base:$GO_PIPELINE_LABEL</param>
+      </params>
+      <materials>
+        <git url="https://github.com/mohitarora/docker-httpd-base.git" />
+        <pipeline pipelineName="centos-base" stageName="build_docker_image" materialName="centos_base_image" />
+      </materials>
+    </pipeline>
+    <pipeline name="sample-app" labeltemplate="v1.0.${COUNT}" isLocked="true" template="docker-images">
+      <params>
+        <param name="PACKER_BUILD_COMMAND_PARAMETER">-var version=$GO_PIPELINE_LABEL -var jdk7-base-image-version=$GO_DEPENDENCY_LABEL_JDK7_BASE_IMAGE -var app_destination=/app -var app_binary_url=https://github.com/mohitarora/coreos-vagrant/raw/master/application/dropwizard-sample-1.0-SNAPSHOT.jar -var app_conf_url=https://raw.githubusercontent.com/mohitarora/coreos-vagrant/master/application/sample.yml sample-app.json</param>
+        <param name="DOCKER_PUSH_COMMAND_PARAMETER">mohitarora/sample-app:$GO_PIPELINE_LABEL</param>
+      </params>
+      <materials>
+        <git url="https://github.com/mohitarora/docker-sample-app.git" />
+        <pipeline pipelineName="jdk7-base" stageName="build_docker_image" materialName="jdk7_base_image" />
+      </materials>
+    </pipeline>
+    <pipeline name="sample-app-httpd" labeltemplate="v1.0.${COUNT}" isLocked="true" template="docker-images">
+      <params>
+        <param name="PACKER_BUILD_COMMAND_PARAMETER">-var version=$GO_PIPELINE_LABEL -var httpd-base-image-version=$GO_DEPENDENCY_LABEL_HTTPD_BASE_IMAGE sample-app-httpd.json</param>
+        <param name="DOCKER_PUSH_COMMAND_PARAMETER">mohitarora/sample-app-httpd:$GO_PIPELINE_LABEL</param>
+      </params>
+      <materials>
+        <git url="https://github.com/mohitarora/docker-sample-app-httpd.git" />
+        <pipeline pipelineName="httpd-base" stageName="build_docker_image" materialName="httpd_base_image" />
+      </materials>
+    </pipeline>
+  </pipelines>
+  <pipelines group="deployment">
+    <pipeline name="deploy_sample_app_dev" labeltemplate="${SAMPLE_APP_IMAGE}" isLocked="true">
+      <materials>
+        <pipeline pipelineName="sample-app" stageName="build_docker_image" materialName="sample_app_image" />
+      </materials>
+      <stage name="deploy" fetchMaterials="false" cleanWorkingDir="true">
+        <jobs>
+          <job name="deploy" />
+        </jobs>
+      </stage>
+    </pipeline>
+    <pipeline name="deploy_sample_app_qa" labeltemplate="${DEPLOY_SAMPLE_APP_DEV}" isLocked="true">
+      <materials>
+        <pipeline pipelineName="deploy_sample_app_dev" stageName="deploy" materialName="deploy_sample_app_dev" />
+      </materials>
+      <stage name="deploy" fetchMaterials="false" cleanWorkingDir="true">
+        <jobs>
+          <job name="deploy" />
+        </jobs>
+      </stage>
+    </pipeline>
+    <pipeline name="deploy_sample_app_prod" labeltemplate="${DEPLOY_SAMPLE_APP_QA}" isLocked="true">
+      <materials>
+        <pipeline pipelineName="deploy_sample_app_qa" stageName="deploy" materialName="deploy_sample_app_qa" />
+      </materials>
+      <stage name="deploy" fetchMaterials="false" cleanWorkingDir="true">
+        <approval type="manual" />
+        <jobs>
+          <job name="deploy" />
+        </jobs>
+      </stage>
+    </pipeline>
+  </pipelines>
+  <templates>
+    <pipeline name="docker-images">
+      <stage name="build_docker_image" cleanWorkingDir="true">
+        <jobs>
+          <job name="build_docker_image">
+            <tasks>
+              <exec command="/bin/bash">
+                <arg>-c</arg>
+                <arg>sudo /tmp/packer/packer build #{PACKER_BUILD_COMMAND_PARAMETER}</arg>
+                <runif status="passed" />
+              </exec>
+              <exec command="/bin/bash">
+                <arg>-c</arg>
+                <arg>sudo docker push #{DOCKER_PUSH_COMMAND_PARAMETER}</arg>
+                <runif status="passed" />
+              </exec>
+            </tasks>
+          </job>
+        </jobs>
+      </stage>
+    </pipeline>
+  </templates>
+  <environments>
+    <environment name="dev">
+      <agents>
+        <physical uuid="72adf4c1-69c5-4635-8ecc-6537ad18a691" />
+      </agents>
+      <pipelines>
+        <pipeline name="deploy_sample_app_dev" />
+      </pipelines>
+    </environment>
+    <environment name="qa">
+      <agents>
+        <physical uuid="72adf4c1-69c5-4635-8ecc-6537ad18a691" />
+      </agents>
+      <pipelines>
+        <pipeline name="deploy_sample_app_qa" />
+      </pipelines>
+    </environment>
+    <environment name="prod">
+      <agents>
+        <physical uuid="72adf4c1-69c5-4635-8ecc-6537ad18a691" />
+      </agents>
+      <pipelines>
+        <pipeline name="deploy_sample_app_prod" />
+      </pipelines>
+    </environment>
+  </environments>
+  <agents>
+    <agent hostname="vagrant-centos65.vagrantup.com" ipaddress="10.0.2.15" uuid="72adf4c1-69c5-4635-8ecc-6537ad18a691" />
+  </agents>
+</cruise>
