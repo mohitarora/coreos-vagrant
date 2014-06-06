@@ -15,7 +15,7 @@ cd coreos-vagrant
 
 3) Configure Dicovery URL
 
-Generate a new token for your cluster from https://discovery.etcd.io/new and replace the discover URL in user-date file.
+Generate a new token for your cluster from https://discovery.etcd.io/new and replace the discover URL in user-data file.
 
 
 4) Startup and SSH
